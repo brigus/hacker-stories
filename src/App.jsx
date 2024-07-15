@@ -1,4 +1,8 @@
+import * as React from 'react';
+
 const App = () => {
+  console.log('App renders');
+
   const stories = [
     {
       title: 'React',
@@ -18,11 +22,15 @@ const App = () => {
     },
   ];
 
+  const handleSearch = (event) => {
+    console.log(event.target.value)
+  }
+
   return (
     <div>
       <h1>My hacker stories</h1>
 
-      <Search />
+      <Search onSearch={handleSearch} />
 
       <hr/>
 
@@ -31,31 +39,42 @@ const App = () => {
   );
 };
 
-const List = (props) => (
-  <ul>
-    {props.list.map((item) => (
-      <Item key={item.objectID} item={item} />
-    ))}
-  </ul>
-);
+const List = (props) => {
+  console.log('List renders');
 
-const Item = (props) => (
-  <li>
-    <span>
-        <a href="{props.item.url">{props.item.title}</a><br />
-    </span>
-    <span>{props.item.author}</span><br />
-    <span>{props.item.num_comments}</span><br />
-    <span>{props.item.points}</span><br />
-  </li>
-);
+  return (
+    <ul>
+      {props.list.map((item) => (
+        <Item key={item.objectID} item={item} />
+      ))}
+    </ul>
+  );
+};
 
-const Search = () => {
+const Item = (props) => {
+  console.log('Item renders');
+
+  return (
+    <li>
+      <span>
+          <a href="{props.item.url">{props.item.title}</a><br />
+      </span>
+      <span>{props.item.author}</span><br />
+      <span>{props.item.num_comments}</span><br />
+      <span>{props.item.points}</span><br />
+    </li>
+  );
+};
+
+const Search = (props) => {
+  console.log('Search renders');
+
+  const [searchTerm, setSearchTerm] = React.useState('');
+
   const handleChange = (event) => {
-    // synthetic event
-    console.log(event);
-    // value of target (here: input HTML element)
-    console.log(event.target.value);
+    setSearchTerm(event.target.value);
+
+    props.onSearch(event);
   };
 
   const handleBlur = (event) => {
@@ -66,6 +85,10 @@ const Search = () => {
     <div>
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" onChange={handleChange} onBlur={handleBlur} />
+
+      <p>
+        Searching for: <strong>{searchTerm}</strong>
+      </p>
     </div>
   );
 };
