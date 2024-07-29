@@ -30,7 +30,7 @@ const App = () => {
       points: 5,
       objectID: 1,
     },
-  ];
+  ]
 
   const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
 
@@ -46,14 +46,19 @@ const App = () => {
     <div>
       <h1>My hacker stories</h1>
 
-      <Search search={searchTerm} onSearch={handleSearch} />
+      <InputWithLabel
+        id="search"
+        label="Search"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      />
 
       <hr/>
 
       <List list={selectedStories} />
     </div>
-  );
-};
+  )
+}
 
 const List = ({ list }) => (
   <ul>
@@ -61,7 +66,7 @@ const List = ({ list }) => (
       <Item key={item.objectID} item={item} />
     ))}
   </ul>
-);
+)
 
 const Item = ({ item }) => (
   <li>
@@ -72,17 +77,15 @@ const Item = ({ item }) => (
     <span>{item.num_comments}</span><br />
     <span>{item.points}</span><br />
   </li>
-);
+)
 
-const Search = ({ search, onSearch }) => (
-  <div>
-    <label htmlFor="search">Search: </label>
-    <input id="search" type="text" value={search} onChange={onSearch} />
 
-    <p>
-      Searching for: <strong>{search}</strong>
-    </p>
-  </div>
-);
+const InputWithLabel = ({ id, label, value, type='text', onInputChange }) => (
+  <>
+    <label htmlFor={id}>{label}</label>
+    nbsp;
+    <input id={id} type={type} value={value} onChange={onInputChange} />
+  </>
+)
 
 export default App;
