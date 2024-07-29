@@ -1,8 +1,6 @@
 import * as React from 'react';
 
 const App = () => {
-  console.log('App renders');
-
   const stories = [
     {
       title: 'React',
@@ -45,46 +43,34 @@ const App = () => {
   );
 };
 
-const List = (props) => {
-  console.log('List renders');
+const List = ({ list }) => (
+  <ul>
+    {list.map((item) => (
+      <Item key={item.objectID} item={item} />
+    ))}
+  </ul>
+);
 
-  return (
-    <ul>
-      {props.list.map((item) => (
-        <Item key={item.objectID} item={item} />
-      ))}
-    </ul>
-  );
-};
+const Item = ({ item }) => (
+  <li>
+    <span>
+        <a href={item.url}>{item.title}</a><br />
+    </span>
+    <span>{item.author}</span><br />
+    <span>{item.num_comments}</span><br />
+    <span>{item.points}</span><br />
+  </li>
+);
 
-const Item = (props) => {
-  console.log('Item renders');
+const Search = ({ search, onSearch }) => (
+  <div>
+    <label htmlFor="search">Search: </label>
+    <input id="search" type="text" value={search} onChange={onSearch} />
 
-  return (
-    <li>
-      <span>
-          <a href="{props.item.url">{props.item.title}</a><br />
-      </span>
-      <span>{props.item.author}</span><br />
-      <span>{props.item.num_comments}</span><br />
-      <span>{props.item.points}</span><br />
-    </li>
-  );
-};
-
-const Search = (props) => {
-  console.log('Search renders');
-
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" value={props.search} onChange={props.onSearch} />
-
-      <p>
-        Searching for: <strong>{props.search}</strong>
-      </p>
-    </div>
-  );
-};
+    <p>
+      Searching for: <strong>{search}</strong>
+    </p>
+  </div>
+);
 
 export default App;
