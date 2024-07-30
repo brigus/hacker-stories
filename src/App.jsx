@@ -1,5 +1,24 @@
 import * as React from 'react';
 
+const initialStories = [
+  {
+    title: 'React',
+    url: 'https://reactjs.org/',
+    author: 'Jordan Walke',
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'Redux',
+    url: 'https://redux.js.org/',
+    author: 'Dan Abromov, Andrew Clarke',
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  },
+]
+
 const useStorageState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
@@ -13,29 +32,18 @@ const useStorageState = (key, initialState) => {
 }
 
 const App = () => {
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://reactjs.org/',
-      author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
-      author: 'Dan Abromov, Andrew Clarke',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ]
-
   const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
+
+  const [stories, setStories] = React.useState(initialStories)
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+  }
+
+  const handleRemoveStory = (item) => {
+    // remove element from the stories array
+    const newStories = stories.filter((story) => item.objectID !== story.objectID)
+    setStories(newStories)
   }
 
   const selectedStories = stories.filter((story) => 
@@ -57,20 +65,20 @@ const App = () => {
 
       <hr/>
 
-      <List list={selectedStories} />
+      <List list={selectedStories} onRemoveItem={handleRemoveStory} />
     </div>
   )
 }
 
-const List = ({ list }) => (
+const List = ({ list, onRemoveItem }) => (
   <ul>
     {list.map((item) => (
-      <Item key={item.objectID} item={item} />
+      <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
     ))}
   </ul>
 )
 
-const Item = ({ item }) => (
+const Item = ({ item, onRemoveItem }) => (
   <li>
     <span>
         <a href={item.url}>{item.title}</a><br />
@@ -78,6 +86,9 @@ const Item = ({ item }) => (
     <span>{item.author}</span><br />
     <span>{item.num_comments}</span><br />
     <span>{item.points}</span><br />
+    <span>
+      <button type="button" onClick={() => onRemoveItem(item)}>Remove</button>
+    </span>
   </li>
 )
 
